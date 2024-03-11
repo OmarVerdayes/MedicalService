@@ -3,11 +3,11 @@ package utez.edu.mx.MedicalService.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import utez.edu.mx.MedicalService.controllers.roles.RolesDTO;
+import org.springframework.validation.BindingResult;
 import utez.edu.mx.MedicalService.controllers.service.ServiceDTO;
-import utez.edu.mx.MedicalService.models.roles.Roles;
 import utez.edu.mx.MedicalService.models.service.ServiceM;
 import utez.edu.mx.MedicalService.models.service.ServiceRepository;
+import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.sql.SQLException;
@@ -18,6 +18,7 @@ public class ServiceService {
 
     @Autowired
     ServiceRepository repository;
+    ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
 
     @Transactional(readOnly=true)
     public CustomResponse<List<ServiceM>> getAll(){
@@ -30,8 +31,14 @@ public class ServiceService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public CustomResponse<ServiceM> insert(ServiceDTO serviceDTO){
+    public CustomResponse<ServiceM> insert(ServiceDTO serviceDTO, BindingResult bindingResult){
         try {
+
+            if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
+            }
 
             return new CustomResponse<>(this.repository.saveAndFlush(serviceDTO.castToOriginalObject()), false,200,"Servicio registrado");
 
@@ -41,11 +48,15 @@ public class ServiceService {
     }
 
     @Transactional(rollbackFor =SQLException.class )
-    public CustomResponse<ServiceM> update(ServiceDTO serviceDTO){
+    public CustomResponse<ServiceM> update(ServiceDTO serviceDTO, BindingResult bindingResult){
         try {
 
             if(!this.repository.existsById(serviceDTO.getId())){
                 return new CustomResponse<>(null,true,400,"El rol no existe");
+            }else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
             }
 
             return new CustomResponse<>(this.repository.saveAndFlush(serviceDTO.castToOriginalObject()),false,200,"Servicio actualizada");

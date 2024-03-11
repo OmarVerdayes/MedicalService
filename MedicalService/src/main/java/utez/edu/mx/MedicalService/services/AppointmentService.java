@@ -3,10 +3,12 @@ package utez.edu.mx.MedicalService.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import utez.edu.mx.MedicalService.controllers.appointment.AppointmentDTO;
 import utez.edu.mx.MedicalService.models.appointment.Appointment;
 import utez.edu.mx.MedicalService.models.appointment.AppointmentRepository;
+import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.sql.SQLException;
@@ -16,6 +18,10 @@ import java.util.List;
 public class AppointmentService {
     @Autowired
     AppointmentRepository repository;
+
+    ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
+
+
     @Transactional(readOnly=true)
     public CustomResponse<List<Appointment>> getAll(){
         try {
@@ -34,7 +40,7 @@ public class AppointmentService {
 
     }
     @Transactional(rollbackFor = {SQLException.class})
-    public CustomResponse<Appointment> insert(@Validated AppointmentDTO appointmentDTO){
+    public CustomResponse<Appointment> insert(@Validated AppointmentDTO appointmentDTO, BindingResult bindingResult){
         try {
             return new CustomResponse<>(this.repository.saveAndFlush(appointmentDTO.castToOriginalObject()), false,200,"Cita registrada!");
         }catch (Exception e){
@@ -42,7 +48,7 @@ public class AppointmentService {
         }
     }
     @Transactional(rollbackFor =SQLException.class )
-    public CustomResponse<Appointment> update(AppointmentDTO appointmentDTO){
+    public CustomResponse<Appointment> update(AppointmentDTO appointmentDTO, BindingResult bindingResult){
         try {
             return new CustomResponse<>(this.repository.saveAndFlush(appointmentDTO.castToOriginalObject()),false,200,"Cita actualizada");
         }catch (Exception e){

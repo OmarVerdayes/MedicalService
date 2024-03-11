@@ -3,12 +3,11 @@ package utez.edu.mx.MedicalService.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.BindingResult;
 import utez.edu.mx.MedicalService.controllers.appointmentStatus.AppointmentStatusDTO;
-import utez.edu.mx.MedicalService.models.appointment.Appointment;
-import utez.edu.mx.MedicalService.models.appointment.AppointmentRepository;
 import utez.edu.mx.MedicalService.models.appointmentStatus.AppointmentStatus;
 import utez.edu.mx.MedicalService.models.appointmentStatus.AppointmentStatusRepository;
+import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.sql.SQLException;
@@ -18,6 +17,10 @@ import java.util.List;
 public class AppointmentStatusService {
     @Autowired
     AppointmentStatusRepository repository;
+
+    ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
+
+
     @Transactional(readOnly=true)
     public CustomResponse<List<AppointmentStatus>> getAll(){
         try {
@@ -36,16 +39,26 @@ public class AppointmentStatusService {
 
     }
     @Transactional(rollbackFor = {SQLException.class})
-    public CustomResponse<AppointmentStatus> insert( AppointmentStatusDTO appointmentStatusDTO){
+    public CustomResponse<AppointmentStatus> insert( AppointmentStatusDTO appointmentStatusDTO, BindingResult bindingResult){
         try {
+            if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
+            }
             return new CustomResponse<>(this.repository.saveAndFlush(appointmentStatusDTO.castToOriginalObject()), false,200,"Estatus de cita registrada!");
         }catch (Exception e){
             return new CustomResponse<>(null,true,400, "Error al registrar el status de la cita");
         }
     }
     @Transactional(rollbackFor =SQLException.class )
-    public CustomResponse<AppointmentStatus> update(AppointmentStatusDTO appointmentStatusDTO){
+    public CustomResponse<AppointmentStatus> update(AppointmentStatusDTO appointmentStatusDTO, BindingResult bindingResult){
         try {
+             if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
+            }
             return new CustomResponse<>(this.repository.saveAndFlush(appointmentStatusDTO.castToOriginalObject()),false,200,"Estatus de la cita actualizada");
         }catch (Exception e){
             return new CustomResponse<>(null,true,400, "Error al actualizar el estatus de la cita");

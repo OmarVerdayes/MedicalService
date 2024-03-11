@@ -28,6 +28,4 @@ public class ServiceM {
     @ManyToOne
     @JoinColumn(name = "id_speciality",nullable = false)
     private Speciality speciality;
-
-
 }

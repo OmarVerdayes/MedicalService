@@ -39,10 +39,9 @@ public class UsersDTO {
     @Size(min = 3, max = 45, message = "El segundo apellido debe tener entre 3 y 45 caracteres")
     private String second_surname;
 
-    @NotNull(message="El primer apellido apellido es obligatorio")
-    @NotBlank(message = "El primer apellido apellido es obligatorio")
-    @Min(value = 10, message = "El correo electrónico debe tener al menos 5 caracteres")
-    @Max(value = 10, message = "El correo electrónico debe tener máximo 60 caracteres")
+    @NotNull(message="El Telefono es obligatorio")
+    @NotBlank(message = "El Telefono es obligatorio")
+    @Size(min = 10, max = 10, message = "El Telefono debe tener 10 caracteres")
     private String phone;
 
     private Roles rol;

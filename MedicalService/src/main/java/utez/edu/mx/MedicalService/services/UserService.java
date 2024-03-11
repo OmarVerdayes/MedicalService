@@ -3,10 +3,12 @@ package utez.edu.mx.MedicalService.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import utez.edu.mx.MedicalService.controllers.users.UsersDTO;
 import utez.edu.mx.MedicalService.models.speciality.Speciality;
 import utez.edu.mx.MedicalService.models.users.Users;
 import utez.edu.mx.MedicalService.models.users.UsersRepository;
+import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.sql.SQLException;
@@ -19,6 +21,9 @@ public class UserService {
     @Autowired
     UsersRepository repository;
 
+    ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
+
+
     @Transactional(readOnly=true)
     public CustomResponse<List<Users>> getAll(){
 
@@ -30,26 +35,36 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public CustomResponse<Users> insert(UsersDTO usersDTO){
+    public CustomResponse<Users> insert(UsersDTO usersDTO, BindingResult bindingResult){
         try {
             if(this.repository.existsByEmail(usersDTO.getEmail()))
+            {
                 return new CustomResponse<>(null, false,200,"Ya existe una usuario registrado con ese correo");
+            }else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
+            }
+
 
             return new CustomResponse<>(this.repository.saveAndFlush(usersDTO.castToOriginalObject()), false,200,"Usuario registrado");
-
         } catch (Exception e) {
             return new CustomResponse<>(null, true, 500, "Error al registrar el usuario");
         }
     }
 
     @Transactional(rollbackFor =SQLException.class )
-    public CustomResponse<Users> update(UsersDTO usersDTO){
+    public CustomResponse<Users> update(UsersDTO usersDTO, BindingResult bindingResult){
         try {
 
             if(!this.repository.existsById(usersDTO.getId())){
                 return new CustomResponse<>(null,true,400,"El usuario no existe");
             }else if(this.repository.existsByEmail(usersDTO.getEmail())){
                 return new CustomResponse<>(null, false,200,"Ya existe un usuario registrada con ese correo");
+            }else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
             }
 
             return new CustomResponse<>(this.repository.saveAndFlush(usersDTO.castToOriginalObject()),false,200,"Especialidad actualizada");

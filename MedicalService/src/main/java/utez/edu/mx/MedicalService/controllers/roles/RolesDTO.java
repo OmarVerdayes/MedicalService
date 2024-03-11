@@ -1,6 +1,7 @@
 package utez.edu.mx.MedicalService.controllers.roles;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,8 @@ import utez.edu.mx.MedicalService.models.roles.Roles;
 @Setter
 public class RolesDTO {
     private Long id;
-    @NotNull(message="La fecha de inicio es obligatoria")
-    @NotBlank(message = "La fecha de inicio es obligatoria")
+    @NotNull(message="El nombre del rol es obligatoria")
+    @NotEmpty(message = "El nombre del rol es obligatoria")
     @Size(min = 3, max = 60, message = "El comentario debe tener entre 3 y 60 caracteres")
     private String name;
 

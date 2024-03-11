@@ -3,12 +3,11 @@ package utez.edu.mx.MedicalService.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import utez.edu.mx.MedicalService.controllers.roles.RolesDTO;
+import org.springframework.validation.BindingResult;
 import utez.edu.mx.MedicalService.controllers.userStatus.UsersStatusDTO;
-import utez.edu.mx.MedicalService.models.roles.Roles;
-import utez.edu.mx.MedicalService.models.roles.RolesRepository;
 import utez.edu.mx.MedicalService.models.userStatus.UserStatus;
 import utez.edu.mx.MedicalService.models.userStatus.UserStatusRepository;
+import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.sql.SQLException;
@@ -19,6 +18,9 @@ public class UserStatusService {
 
     @Autowired
     UserStatusRepository repository;
+
+    ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
+
 
     @Transactional(readOnly=true)
     public CustomResponse<List<UserStatus>> getAll(){
@@ -31,11 +33,17 @@ public class UserStatusService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public CustomResponse<UserStatus> insert(UsersStatusDTO usersStatusDTO){
+    public CustomResponse<UserStatus> insert(UsersStatusDTO usersStatusDTO, BindingResult bindingResult){
         try {
-            if(this.repository.existsByName(usersStatusDTO.getName()))
+            if(this.repository.existsByName(usersStatusDTO.getName())){
                 return new CustomResponse<>(null, false,200,"Ya existe una estatus de los usuarios  registrado con ese nombre");
+            }
+            else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
 
+                return new CustomResponse<>(null, true,400,errorMessage);
+            }
             return new CustomResponse<>(this.repository.saveAndFlush(usersStatusDTO.castToOriginalObject()), false,200,"roles registrado");
 
         } catch (Exception e) {
@@ -44,13 +52,18 @@ public class UserStatusService {
     }
 
     @Transactional(rollbackFor =SQLException.class )
-    public CustomResponse<UserStatus> update(UsersStatusDTO usersStatusDTO){
+    public CustomResponse<UserStatus> update(UsersStatusDTO usersStatusDTO, BindingResult bindingResult){
         try {
 
             if(!this.repository.existsById(usersStatusDTO.getId())){
                 return new CustomResponse<>(null,true,400,"El estatus de los usuarios no existe");
             }else if(this.repository.existsByName(usersStatusDTO.getName())){
                 return new CustomResponse<>(null, false,200,"Ya existe una estatus de los usuarios registrado con ese nombre");
+            }else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+
+                return new CustomResponse<>(null, true,400,errorMessage);
             }
 
             return new CustomResponse<>(this.repository.saveAndFlush(usersStatusDTO.castToOriginalObject()),false,200,"Estatus de los usuarios actualizada");

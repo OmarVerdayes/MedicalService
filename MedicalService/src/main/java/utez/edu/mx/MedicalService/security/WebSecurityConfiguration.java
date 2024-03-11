@@ -51,7 +51,9 @@ public class WebSecurityConfiguration {
     }
 
     public static void main(String[] args) {
-        System.out.println("pass: "+new BCryptPasswordEncoder().encode("omar"));
+        System.out.println("pass: "+new BCryptPasswordEncoder().encode("PasswordAdmin123"));
+        System.out.println("pass: "+new BCryptPasswordEncoder().encode("PasswordDoctor123"));
+        System.out.println("pass: "+new BCryptPasswordEncoder().encode("PasswordPaciente123"));
     }
 
 

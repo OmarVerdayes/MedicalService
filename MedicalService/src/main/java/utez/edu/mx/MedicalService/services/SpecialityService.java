@@ -3,12 +3,11 @@ package utez.edu.mx.MedicalService.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import utez.edu.mx.MedicalService.controllers.roles.RolesDTO;
+import org.springframework.validation.BindingResult;
 import utez.edu.mx.MedicalService.controllers.speciality.SpecialityDTO;
-import utez.edu.mx.MedicalService.models.roles.Roles;
-import utez.edu.mx.MedicalService.models.roles.RolesRepository;
 import utez.edu.mx.MedicalService.models.speciality.Speciality;
 import utez.edu.mx.MedicalService.models.speciality.SpecialityRepository;
+import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.sql.SQLException;
@@ -19,6 +18,7 @@ public class SpecialityService {
 
     @Autowired
     SpecialityRepository  repository;
+    ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
 
     @Transactional(readOnly=true)
     public CustomResponse<List<Speciality>> getAll(){
@@ -31,10 +31,15 @@ public class SpecialityService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public CustomResponse<Speciality> insert(SpecialityDTO specialityDTO){
+    public CustomResponse<Speciality> insert(SpecialityDTO specialityDTO, BindingResult bindingResult){
         try {
-            if(this.repository.existsByName(specialityDTO.getName()))
+            if(this.repository.existsByName(specialityDTO.getName())){
                 return new CustomResponse<>(null, false,200,"Ya existe una espcialidad registrado con ese nombre");
+            }else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
+            }
 
             return new CustomResponse<>(this.repository.saveAndFlush(specialityDTO.castToOriginalObject()), false,200,"Especialidad registrada");
 
@@ -44,13 +49,17 @@ public class SpecialityService {
     }
 
     @Transactional(rollbackFor =SQLException.class )
-    public CustomResponse<Speciality> update(SpecialityDTO specialityDTO){
+    public CustomResponse<Speciality> update(SpecialityDTO specialityDTO, BindingResult bindingResult){
         try {
 
             if(!this.repository.existsById(specialityDTO.getId())){
                 return new CustomResponse<>(null,true,400,"La especialidad no existe");
             }else if(this.repository.existsByName(specialityDTO.getName())){
                 return new CustomResponse<>(null, false,200,"Ya existe una especialidad registrada con ese nombre");
+            }else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
             }
 
             return new CustomResponse<>(this.repository.saveAndFlush(specialityDTO.castToOriginalObject()),false,200,"Especialidad actualizada");

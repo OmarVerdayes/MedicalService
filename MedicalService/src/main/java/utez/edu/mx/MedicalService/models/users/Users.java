@@ -28,7 +28,7 @@ public class Users {
     private String fisrt_surname;
     @Column( columnDefinition = "varchar(45)")
     private String second_surname;
-    @Column( columnDefinition = "int(10)",nullable = false)
+    @Column( columnDefinition = "varchar(10)",nullable = false)
     private String phone;
     @ManyToOne
     @JoinColumn(name = "id_rol",nullable = false)

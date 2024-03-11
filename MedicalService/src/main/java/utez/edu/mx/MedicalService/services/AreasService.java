@@ -3,9 +3,11 @@ package utez.edu.mx.MedicalService.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import utez.edu.mx.MedicalService.controllers.areas.AreasDTO;
 import utez.edu.mx.MedicalService.models.areas.Areas;
 import utez.edu.mx.MedicalService.models.areas.AreasRepository;
+import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.sql.SQLException;
@@ -16,6 +18,8 @@ import java.util.List;
 public class AreasService {
     @Autowired
     AreasRepository repository;
+
+    ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
 
     @Transactional(readOnly=true)
     public CustomResponse<List<Areas>> getAll(){
@@ -28,10 +32,15 @@ public class AreasService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public CustomResponse<Areas> insert(AreasDTO area){
+    public CustomResponse<Areas> insert(AreasDTO area, BindingResult bindingResult){
         try {
-            if(this.repository.existsByName(area.getName()))
+            if(this.repository.existsByName(area.getName())){
                 return new CustomResponse<>(null, false,200,"Ya existe una area registrado con ese nombre");
+            }else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
+            }
 
             return new CustomResponse<>(this.repository.saveAndFlush(area.castToOriginalObject()), false,200,"Area registrado");
 
@@ -41,13 +50,17 @@ public class AreasService {
     }
 
     @Transactional(rollbackFor =SQLException.class )
-    public CustomResponse<Areas> update(AreasDTO areasDTO){
+    public CustomResponse<Areas> update(AreasDTO areasDTO, BindingResult bindingResult){
         try {
 
             if(!this.repository.existsById(areasDTO.getId())){
-                return new CustomResponse<>(null,true,400,"El rol no existe");
+                return new CustomResponse<>(null,true,400,"El area no existe");
             }else if(this.repository.existsByName(areasDTO.getName())){
                 return new CustomResponse<>(null, false,200,"Ya existe una area registrado con ese nombre");
+            }else if (bindingResult.hasErrors()) {
+                // Si hay errores de validación, devuelve una respuesta con los mensajes de error
+                String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
+                return new CustomResponse<>(null, true,400,errorMessage);
             }
 
             return new CustomResponse<>(this.repository.saveAndFlush(areasDTO.castToOriginalObject()),false,200,"Area actualizada");

@@ -16,9 +16,9 @@ import utez.edu.mx.MedicalService.models.appointmentStatus.AppointmentStatus;
 @Setter
 public class AppointmentStatusDTO {
     private Long id;
-    @NotNull(message="La fecha de inicio es obligatoria")
-    @NotBlank(message = "La fecha de inicio es obligatoria")
-    @Size(min = 3, max = 60, message = "El comentario debe tener entre 3 y 60 caracteres")
+    @NotNull(message="El nombre es obligatoria")
+    @NotBlank(message = "El nombre de inicio es obligatoria")
+    @Size(min = 3, max = 60, message = "El nombre debe tener entre 3 y 60 caracteres")
     private String name;
 
 

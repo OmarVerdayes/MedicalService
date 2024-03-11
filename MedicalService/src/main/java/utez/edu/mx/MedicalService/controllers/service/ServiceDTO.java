@@ -7,14 +7,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.MedicalService.models.service.ServiceM;
 import utez.edu.mx.MedicalService.models.speciality.Speciality;
+import utez.edu.mx.MedicalService.utils.ActionsFiles;
+
+import java.io.IOException;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class ServiceDTO {
+    @Value("${app.url.route.image}")
+    private String urlRouteImage;
+
+    ActionsFiles actionsFiles=new ActionsFiles();
+
     private Long id;
     @NotNull(message="El titulo es obligatorio")
     @NotBlank(message = "El titulo es obligatorio")
@@ -27,20 +37,20 @@ public class ServiceDTO {
     @Size(min = 3, max = 255, message = "El resumen debe tener entre 3 y 255 caracteres")
     private String summary;
 
-    @NotNull(message="El resumen es description")
-    @NotBlank(message = "El resumen es description")
-    @Size(min = 3,max = 255, message = "El comentario debe tener entre 3 y 255 caracteres")
+    @NotNull(message="La descripcion es description")
+    @NotBlank(message = "La descripcion es description")
+    @Size(min = 3, message = "La descripcion debe tener entre minimo 3 caracteres")
     private String description;
 
     @NotNull(message="La fecha de inicio es obligatoria")
     @NotBlank(message = "La fecha de inicio es obligatoria")
     @Size(min = 3, message = "El comentario debe tener minimo 3")
-    private String image;
+    private MultipartFile imageArchivo;
 
     private Speciality speciality;
 
-    public ServiceM castToOriginalObject(){
-        return new ServiceM(id,title, summary, description, image, speciality);
+    public ServiceM castToOriginalObject() throws IOException {
+        return new ServiceM(id,title, summary, description, actionsFiles.saveFile(imageArchivo,urlRouteImage), speciality);
     }
 
 }

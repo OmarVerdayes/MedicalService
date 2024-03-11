@@ -3,6 +3,7 @@ package utez.edu.mx.MedicalService.controllers.userStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.MedicalService.controllers.appointment.AppointmentDTO;
@@ -28,12 +29,12 @@ public class UserStatusController {
         return new ResponseEntity<>(this.service.getAll(), HttpStatus.OK);
     }
     @PostMapping("/")
-    public ResponseEntity<CustomResponse<UserStatus>> insert(@Validated @RequestBody UsersStatusDTO usersStatusDTO){
-        return new ResponseEntity<>(this.service.insert(usersStatusDTO),HttpStatus.CREATED);
+    public ResponseEntity<CustomResponse<UserStatus>> insert(@Validated @RequestBody UsersStatusDTO usersStatusDTO, BindingResult bindingResult){
+        return new ResponseEntity<>(this.service.insert(usersStatusDTO,bindingResult),HttpStatus.CREATED);
     }
     @PutMapping("/")
-    public ResponseEntity<CustomResponse<UserStatus>> update(@Validated @RequestBody UsersStatusDTO usersStatusDTO){
-        return new ResponseEntity<>(this.service.update(usersStatusDTO),HttpStatus.CREATED);
+    public ResponseEntity<CustomResponse<UserStatus>> update(@Validated @RequestBody UsersStatusDTO usersStatusDTO, BindingResult bindingResult){
+        return new ResponseEntity<>(this.service.update(usersStatusDTO,bindingResult),HttpStatus.CREATED);
     }
     @DeleteMapping("/")
     public ResponseEntity<CustomResponse<UserStatus>> delete(@Validated @RequestBody Map<String,Long> requets){
