@@ -1,17 +1,14 @@
 package utez.edu.mx.MedicalService.controllers.roles;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import utez.edu.mx.MedicalService.controllers.appointment.AppointmentDTO;
-import utez.edu.mx.MedicalService.models.appointment.Appointment;
+import utez.edu.mx.MedicalService.controllers.roles.DTO.RolesDTO;
 import utez.edu.mx.MedicalService.models.roles.Roles;
-import utez.edu.mx.MedicalService.services.AppointmentService;
-import utez.edu.mx.MedicalService.services.RolesService;
+import utez.edu.mx.MedicalService.services.roles.RolesService;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.util.List;

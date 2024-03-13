@@ -6,11 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import utez.edu.mx.MedicalService.controllers.appointment.AppointmentDTO;
-import utez.edu.mx.MedicalService.models.appointment.Appointment;
+import utez.edu.mx.MedicalService.controllers.speciality.DTO.SpecialityDTO;
 import utez.edu.mx.MedicalService.models.speciality.Speciality;
-import utez.edu.mx.MedicalService.services.AppointmentService;
-import utez.edu.mx.MedicalService.services.SpecialityService;
+import utez.edu.mx.MedicalService.services.speciality.SpecialityService;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.util.List;

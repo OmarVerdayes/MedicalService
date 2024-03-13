@@ -14,7 +14,7 @@ public class ScriptInitializer {
     @PostConstruct
     public void init() {
         if (checkIfTableIsEmpty("roles")) {
-            jdbcTemplate.execute("INSERT INTO `roles` (`name`) VALUES ('administrador'),('doctor'),('paciente');");
+            jdbcTemplate.execute("INSERT INTO `roles` (`name`) VALUES ('Administrador'),('Doctor'),('Paciente');");
         }
 
         if (checkIfTableIsEmpty("user_status")) {

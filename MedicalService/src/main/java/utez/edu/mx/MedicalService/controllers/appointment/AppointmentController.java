@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import utez.edu.mx.MedicalService.controllers.appointment.DTO.AppintmentUpdateStatusDTO;
+import utez.edu.mx.MedicalService.controllers.appointment.DTO.AppointmentDTO;
 import utez.edu.mx.MedicalService.models.appointment.Appointment;
-import utez.edu.mx.MedicalService.services.AppointmentService;
+import utez.edu.mx.MedicalService.services.appointment.AppointmentService;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
 import java.util.List;
@@ -35,5 +37,9 @@ public class AppointmentController {
     public ResponseEntity<CustomResponse<Appointment>> delete(@Validated @RequestBody Map<String,Long> requets){
         Long id=requets.get("id");
         return new ResponseEntity<>(this.service.delete(id),HttpStatus.CREATED);
+    }
+    @PatchMapping("/")
+    public ResponseEntity<CustomResponse<Appointment>> updateStatus(@Validated @RequestBody AppintmentUpdateStatusDTO updateStatusDTO, BindingResult bindingResult){
+        return new ResponseEntity<>(this.service.updateStatus(updateStatusDTO,bindingResult),HttpStatus.CREATED);
     }
 }

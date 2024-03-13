@@ -19,3 +19,5 @@ public class Areas {
     @Column( columnDefinition = "varchar(90)",nullable = false)
     private String name;
 }
+
+

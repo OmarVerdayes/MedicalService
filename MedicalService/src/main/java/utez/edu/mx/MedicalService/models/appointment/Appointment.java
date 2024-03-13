@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import utez.edu.mx.MedicalService.models.appointmentStatus.AppointmentStatus;
+import utez.edu.mx.MedicalService.models.doctors.Doctors;
+import utez.edu.mx.MedicalService.models.patient.Patient;
 import utez.edu.mx.MedicalService.models.speciality.Speciality;
 import utez.edu.mx.MedicalService.models.users.Users;
 
@@ -32,9 +34,9 @@ public class Appointment {
     @JoinColumn(name = "id_appointmentStatus",nullable = false)
     private AppointmentStatus appointmentStatus;
     @ManyToOne
-    @JoinColumn(name = "id_user_doctor",nullable = false)
-    private Users doctor;
+    @JoinColumn(name = "id_doctor",nullable = false)
+    private Doctors doctor;
     @ManyToOne
-    @JoinColumn(name = "id_user_patient",nullable = false)
-    private Users patient;
+    @JoinColumn(name = "id_patient",nullable = false)
+    private Patient patient;
 }
