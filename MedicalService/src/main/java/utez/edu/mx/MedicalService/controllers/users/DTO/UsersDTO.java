@@ -18,7 +18,7 @@ public class UsersDTO {
     private Long id;
     @NotNull(message="El nombre es obligatorio")
     @NotBlank(message = "El nombre es obligatorio")
-    @Size(min = 3, max = 60, message = "El comentario debe tener entre 3 y 60 caracteres")
+    @Size(min = 3, max = 60, message = "El nombre debe tener entre 3 y 60 caracteres")
     private String name;
 
     @NotNull(message="El nombre es obligatorio")

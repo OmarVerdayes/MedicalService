@@ -1,19 +1,19 @@
-package utez.edu.mx.MedicalService.controllers.commments.DTO;
+package utez.edu.mx.MedicalService.controllers.doctor_comments.DTO;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.userdetails.User;
-import utez.edu.mx.MedicalService.models.comments.Comments;
+import utez.edu.mx.MedicalService.models.doctor_comments.Doctor_comments;
+import utez.edu.mx.MedicalService.models.doctors.Doctors;
 import utez.edu.mx.MedicalService.models.users.Users;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class CommentsDTO {
+public class Doctor_commentsDTO {
 
     private Long id;
     @NotNull(message="El comentario es obligatorio")
@@ -25,10 +25,10 @@ public class CommentsDTO {
     @Min(value = 1, message = "La calificación debe ser igual o mayor que 1")
     @Max(value = 5, message = "La calificación debe ser igual o menor que 5")
     private int qualification;
-    private Users users;
+    private Doctors doctor;
 
-    public Comments castToOriginalObject(){
-        return new Comments(id,comment,qualification,users);
+    public Doctor_comments castToOriginalObject(){
+        return new Doctor_comments(id,comment,qualification,doctor);
     }
 
 }

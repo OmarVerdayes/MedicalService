@@ -36,12 +36,4 @@ public class Users {
     @ManyToOne
     @JoinColumn(name = "id_status",nullable = false)
     private UserStatus status;
-    /*
-    @ManyToMany
-    @JoinTable(name = "usuario_especialidad",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "especialidad_id"))
-    private Set<Especialidad> especialidades = new HashSet<>();
-
-     */
 }

@@ -5,7 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import utez.edu.mx.MedicalService.models.speciality.Speciality;
 import utez.edu.mx.MedicalService.models.users.Users;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="doctors")
@@ -24,7 +28,5 @@ public class Doctors {
     @ManyToOne
     @JoinColumn(name = "id_user",nullable = false)
     private Users user;
-
-
 
  }

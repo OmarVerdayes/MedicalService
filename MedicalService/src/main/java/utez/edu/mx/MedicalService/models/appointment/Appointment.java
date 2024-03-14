@@ -25,8 +25,6 @@ public class Appointment {
     private String start_date;
     @Column( columnDefinition = "DATETIME",nullable = false)
     private String final_date;
-    @Column( columnDefinition = "text")
-    private String comments;
     @ManyToOne
     @JoinColumn(name = "id_speciality",nullable = false)
     private Speciality speciality;
