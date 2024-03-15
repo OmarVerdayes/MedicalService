@@ -9,7 +9,6 @@ import utez.edu.mx.MedicalService.models.appointmentStatus.AppointmentStatus;
 import utez.edu.mx.MedicalService.models.doctors.Doctors;
 import utez.edu.mx.MedicalService.models.patient.Patient;
 import utez.edu.mx.MedicalService.models.speciality.Speciality;
-import utez.edu.mx.MedicalService.models.users.Users;
 
 @Entity
 @Table(name="appointment")

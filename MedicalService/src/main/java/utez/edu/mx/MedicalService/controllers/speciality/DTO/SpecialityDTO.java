@@ -19,9 +19,9 @@ public class SpecialityDTO {
 
 
     private Long id;
-    @NotNull(message="La fecha de inicio es obligatoria")
-    @NotBlank(message = "La fecha de inicio es obligatoria")
-    @Size(min = 3, max = 60, message = "El comentario debe tener entre 3 y 60 caracteres")
+    @NotNull(message="La nombre de la especialidad es obligatoria")
+    @NotBlank(message = "La nombre de la especialidad es obligatoria")
+    @Size(min = 3, max = 60, message = "El nombre de la especialidad debe tener entre 3 y 60 caracteres")
     private String name;
 
     private Areas areas;

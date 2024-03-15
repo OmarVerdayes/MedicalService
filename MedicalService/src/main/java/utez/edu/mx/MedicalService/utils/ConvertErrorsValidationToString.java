@@ -8,8 +8,9 @@ public class ConvertErrorsValidationToString {
     public String convertErrorsValidationToString(BindingResult bindingResult) {
         StringBuilder errorMessage = new StringBuilder();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            errorMessage.append(fieldError.getDefaultMessage()).append("\n");
+            errorMessage.append(fieldError.getDefaultMessage()).append("\n"); // Agregar un salto de línea después de cada mensaje de error
         }
         return errorMessage.toString();
     }
+
 }

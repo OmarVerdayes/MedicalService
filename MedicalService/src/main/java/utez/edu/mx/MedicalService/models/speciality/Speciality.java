@@ -6,10 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import utez.edu.mx.MedicalService.models.areas.Areas;
-import utez.edu.mx.MedicalService.models.doctors.Doctors;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name="speciality")

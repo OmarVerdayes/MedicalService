@@ -42,9 +42,8 @@ public class ServiceDTO {
     @Size(min = 3, message = "La descripcion debe tener entre minimo 3 caracteres")
     private String description;
 
-    @NotNull(message="La fecha de inicio es obligatoria")
-    @NotBlank(message = "La fecha de inicio es obligatoria")
-    @Size(min = 3, message = "El comentario debe tener minimo 3")
+    @NotNull(message="La imagen es obligatoria")
+    @NotBlank(message = "La imagen es obligatoria")
     private MultipartFile imageArchivo;
 
     private Speciality speciality;

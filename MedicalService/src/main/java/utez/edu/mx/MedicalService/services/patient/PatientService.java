@@ -39,6 +39,7 @@ public class PatientService {
                 return new CustomResponse<>(null, true,400,errorMessage);
             }
 
+
             return new CustomResponse<>(this.repository.saveAndFlush(patientDTO.castToOriginalObject()), false,200,"Paciente registrado");
 
         } catch (Exception e) {

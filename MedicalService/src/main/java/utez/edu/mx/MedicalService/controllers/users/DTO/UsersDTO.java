@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import utez.edu.mx.MedicalService.models.roles.Roles;
-import utez.edu.mx.MedicalService.models.speciality.Speciality;
 import utez.edu.mx.MedicalService.models.userStatus.UserStatus;
 import utez.edu.mx.MedicalService.models.users.Users;
 
@@ -21,14 +20,15 @@ public class UsersDTO {
     @Size(min = 3, max = 60, message = "El nombre debe tener entre 3 y 60 caracteres")
     private String name;
 
-    @NotNull(message="El nombre es obligatorio")
-    @NotBlank(message = "El nombre es obligatorio")
+    @NotNull(message="El password es obligatorio")
+    @NotBlank(message = "El password es obligatorio")
+    @Size(min = 3, message = "El la contraseña  debe tener minimo 3 caracteres")
     private String password;
 
     @NotNull(message="El email es obligatorio")
     @NotBlank(message = "El email es obligatorio")
     @Email(message = "El correo electrónico debe tener un formato válido")
-    @Size(min = 3, max = 90, message = "El comentario debe tener entre 3 y 90 caracteres")
+    @Size(min = 3, max = 90, message = "El email debe tener entre 3 y 90 caracteres")
     private String email;
 
     @NotNull(message="El primer apellido apellido es obligatorio")

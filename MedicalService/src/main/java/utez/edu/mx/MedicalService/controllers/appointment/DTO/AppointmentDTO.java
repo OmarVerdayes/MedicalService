@@ -23,9 +23,9 @@ public class AppointmentDTO {
     @Future(message = "La fecha de inicio tiene que ser despues de la fecha actual")
     private String start_date;
 
-    @NotNull(message="La fecha de inicio es obligatoria")
-    @NotBlank(message = "La fecha de inicio es obligatoria")
-    @Future(message = "La fecha de inicio tiene que ser despues de la fecha actual")
+    @NotNull(message="La fecha de fin es obligatoria")
+    @NotBlank(message = "La fecha de fin es obligatoria")
+    @Future(message = "La fecha de fin tiene que ser despues de la fecha actual")
     private String final_date;
 
     private Speciality speciality;

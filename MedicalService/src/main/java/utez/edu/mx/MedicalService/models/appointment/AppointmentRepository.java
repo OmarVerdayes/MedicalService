@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 public interface AppointmentRepository  extends JpaRepository<Appointment,Long> {
     @Modifying
     @Query("update Appointment As A set A.appointmentStatus.id=:id_new_status where A.id=:id_appointment")
