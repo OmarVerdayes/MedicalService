@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import utez.edu.mx.MedicalService.models.users.Users;
 
+import java.sql.Time;
+
 @Entity
 @Table(name="doctors")
 @NoArgsConstructor
@@ -21,6 +23,12 @@ public class Doctors {
     private String id_number; //esto es el numero de cedula
     @Column( columnDefinition = "int(3)",nullable = false)
     private Long consulting_room;
+
+    @Column( columnDefinition = "Time",nullable = false)
+    private Time shift_start_time;
+    @Column( columnDefinition = "Time",nullable = false)
+    private Time shift_finish_time;
+
     @ManyToOne
     @JoinColumn(name = "id_user",nullable = false)
     private Users user;

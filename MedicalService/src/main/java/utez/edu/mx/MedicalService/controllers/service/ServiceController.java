@@ -30,7 +30,7 @@ public class ServiceController {
         return new ResponseEntity<>(this.service.insert(serviceDTO,bindingResult),HttpStatus.CREATED);
     }
     @PutMapping("/")
-    public ResponseEntity<CustomResponse<ServiceM>> update(@Validated @RequestBody ServiceDTO serviceDTO, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse<ServiceM>> update(@Validated @ModelAttribute ServiceDTO serviceDTO, BindingResult bindingResult){
         return new ResponseEntity<>(this.service.update(serviceDTO,bindingResult),HttpStatus.CREATED);
     }
     @DeleteMapping("/")

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import utez.edu.mx.MedicalService.models.speciality.Speciality;
+import utez.edu.mx.MedicalService.models.areas.Areas;
 
 @Entity
 @Table(name="service")
@@ -23,9 +23,11 @@ public class ServiceM {
     private String summary;
     @Column( columnDefinition = "text",nullable = false)
     private String description;
+    @Column( columnDefinition = "DECIMAL",nullable = false)
+    private Long price;
     @Column( columnDefinition = "text",nullable = false)
     private String image;
     @ManyToOne
-    @JoinColumn(name = "id_speciality",nullable = false)
-    private Speciality speciality;
+    @JoinColumn(name = "id_area",nullable = false)
+    private Areas areas;
 }

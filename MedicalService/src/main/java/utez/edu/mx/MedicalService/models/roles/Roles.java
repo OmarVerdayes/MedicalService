@@ -1,5 +1,6 @@
 package utez.edu.mx.MedicalService.models.roles;
 
+import io.micrometer.observation.ObservationFilter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,5 +19,6 @@ public class Roles {
     private Long id;
     @Column( columnDefinition = "varchar(60)",nullable = false)
     private String name;
+
 
 }

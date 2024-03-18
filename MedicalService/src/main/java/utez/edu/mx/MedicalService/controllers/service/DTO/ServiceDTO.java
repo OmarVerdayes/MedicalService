@@ -1,5 +1,6 @@
 package utez.edu.mx.MedicalService.controllers.service.DTO;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,9 +10,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
+import utez.edu.mx.MedicalService.models.areas.Areas;
 import utez.edu.mx.MedicalService.models.service.ServiceM;
-import utez.edu.mx.MedicalService.models.speciality.Speciality;
 import utez.edu.mx.MedicalService.utils.ActionsFiles;
+import utez.edu.mx.MedicalService.utils.validations.EndTimeAfterStartTime;
 
 import java.io.IOException;
 
@@ -19,8 +21,9 @@ import java.io.IOException;
 @AllArgsConstructor
 @Getter
 @Setter
+@EndTimeAfterStartTime
 public class ServiceDTO {
-    @Value("${app.url.route.image}")
+    @Value("${app.url.route.service.image}")
     private String urlRouteImage;
 
     ActionsFiles actionsFiles=new ActionsFiles();
@@ -41,15 +44,20 @@ public class ServiceDTO {
     @NotBlank(message = "La descripcion es description")
     @Size(min = 3, message = "La descripcion debe tener entre minimo 3 caracteres")
     private String description;
+    @NotNull(message="El precio es obligatorio")
+    @NotBlank(message = "El precio es obligatorio")
+    @Min(value = 0, message = "El precio no puede ser negativo")
+    private Long price;
 
-    @NotNull(message="La imagen es obligatoria")
-    @NotBlank(message = "La imagen es obligatoria")
-    private MultipartFile imageArchivo;
+    private MultipartFile imageFile;
 
-    private Speciality speciality;
+    private Areas areas;
 
     public ServiceM castToOriginalObject() throws IOException {
-        return new ServiceM(id,title, summary, description, actionsFiles.saveFile(imageArchivo,urlRouteImage), speciality);
+        return new ServiceM(id,title, summary, description,price, actionsFiles.saveFile(imageFile,urlRouteImage), areas);
+    }
+    public ServiceM castToOriginalObjectNoImage(String oldImage) throws IOException {
+        return new ServiceM(id,title, summary, description,price, oldImage, areas);
     }
 
 }

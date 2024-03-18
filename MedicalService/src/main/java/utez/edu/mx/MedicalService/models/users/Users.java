@@ -30,6 +30,8 @@ public class Users {
     private String second_surname;
     @Column( columnDefinition = "varchar(10)",nullable = false)
     private String phone;
+    @Column( columnDefinition = "text",nullable = false)
+    private String image;
     @ManyToOne
     @JoinColumn(name = "id_rol",nullable = false)
     private Roles rol;

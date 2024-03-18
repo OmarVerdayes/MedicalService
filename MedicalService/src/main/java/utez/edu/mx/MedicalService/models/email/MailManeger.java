@@ -48,9 +48,6 @@ public class MailManeger {
                     + "</footer>"
                     + "</body></html>";
             helper.setText(htmlMsg, true);
-            /*FileSystemResource img = new FileSystemResource(new File("ruta/a/tu/imagen.jpg"));
-            helper.addInline("image", img);*/
-
             javaMailSender.send(message);
         }catch (Exception e){
             throw new RuntimeException(e);

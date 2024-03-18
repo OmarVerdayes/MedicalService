@@ -24,10 +24,16 @@ public class PatientDTO {
     @Size(min = 2,  message = "El descripcion de las alergias debe tener 2 caracteres como minimo (NO)")
     private String allergies;
 
+    @NotNull(message="El numero de cuenta es obligatorio")
+    @NotBlank(message = "El numero de cuenta es obligatorio")
+    @Size(min = 11,max=18,  message = "El numero de cuenta debe tener entre 11 y 18 caracteres")
+    private String account_number;
+
+
     private Users user;
 
 
     public Patient castToOriginalObject(){
-        return new Patient(id,nss,allergies,user);
+        return new Patient(id,nss,allergies,account_number,user);
     }
 }

@@ -38,8 +38,6 @@ public class PatientService {
                 String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
                 return new CustomResponse<>(null, true,400,errorMessage);
             }
-
-
             return new CustomResponse<>(this.repository.saveAndFlush(patientDTO.castToOriginalObject()), false,200,"Paciente registrado");
 
         } catch (Exception e) {
@@ -50,13 +48,12 @@ public class PatientService {
     @Transactional(rollbackFor =SQLException.class )
     public CustomResponse<Patient> update(PatientDTO patientDTO, BindingResult bindingResult){
         try {
-
-            if(!this.repository.existsById(patientDTO.getId())){
-                return new CustomResponse<>(null,true,400,"El paciente no existe");
-            }else if (bindingResult.hasErrors()) {
+            if (bindingResult.hasErrors()) {
                 // Si hay errores de validación, devuelve una respuesta con los mensajes de error
                 String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
                 return new CustomResponse<>(null, true,400,errorMessage);
+            }else if(!this.repository.existsById(patientDTO.getId())){
+                return new CustomResponse<>(null,true,400,"El paciente no existe");
             }
 
             return new CustomResponse<>(this.repository.saveAndFlush(patientDTO.castToOriginalObject()),false,200,"Paciente se actualizo");

@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import utez.edu.mx.MedicalService.controllers.service.DTO.ServiceDTO;
 import utez.edu.mx.MedicalService.models.service.ServiceM;
 import utez.edu.mx.MedicalService.models.service.ServiceRepository;
+import utez.edu.mx.MedicalService.utils.ActionsFiles;
 import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
@@ -20,6 +21,7 @@ public class ServiceService {
     ServiceRepository repository;
     ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
 
+    ActionsFiles actionsFiles=new ActionsFiles();
     @Transactional(readOnly=true)
     public CustomResponse<List<ServiceM>> getAll(){
 
@@ -32,23 +34,31 @@ public class ServiceService {
 
     @Transactional(rollbackFor = {SQLException.class})
     public CustomResponse<ServiceM> insert(ServiceDTO serviceDTO, BindingResult bindingResult){
+        ServiceM serviceM=null;
         try {
 
             if (bindingResult.hasErrors()) {
                 // Si hay errores de validación, devuelve una respuesta con los mensajes de error
                 String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
                 return new CustomResponse<>(null, true,400,errorMessage);
+            }else if(serviceDTO.getImageFile()==null){
+                return new CustomResponse<>(null, true, 400, "La imagen no puede estar vacia");
+
             }
 
-            return new CustomResponse<>(this.repository.saveAndFlush(serviceDTO.castToOriginalObject()), false,200,"Servicio registrado");
+            serviceM=serviceDTO.castToOriginalObject();
+
+            return new CustomResponse<>(this.repository.saveAndFlush(serviceM), false,200,"Servicio registrado");
 
         } catch (Exception e) {
+            actionsFiles.deleteFile(serviceM.getImage());
             return new CustomResponse<>(null, true, 500, "Error al registrar el servicios");
         }
     }
 
     @Transactional(rollbackFor =SQLException.class )
     public CustomResponse<ServiceM> update(ServiceDTO serviceDTO, BindingResult bindingResult){
+        ServiceM serviceM=null;
         try {
 
             if(!this.repository.existsById(serviceDTO.getId())){
@@ -59,7 +69,16 @@ public class ServiceService {
                 return new CustomResponse<>(null, true,400,errorMessage);
             }
 
-            return new CustomResponse<>(this.repository.saveAndFlush(serviceDTO.castToOriginalObject()),false,200,"Servicio actualizada");
+            String oldImage=this.repository.getOldImage(serviceDTO.getId());
+
+            if (serviceDTO.getImageFile()==null){
+                serviceM=serviceDTO.castToOriginalObjectNoImage(oldImage);
+            }else {
+                actionsFiles.deleteFile(oldImage);
+                serviceM=serviceDTO.castToOriginalObject();
+            }
+
+            return new CustomResponse<>(this.repository.saveAndFlush(serviceM),false,200,"Servicio actualizado");
 
         } catch (Exception e) {
             return new CustomResponse<>(null, true, 500, "Error al actualizar el servicio");

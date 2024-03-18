@@ -21,6 +21,9 @@ public class Patient {
     private String nss;
     @Column( columnDefinition = "text",nullable = false)
     private String allergies;
+    @Column( columnDefinition = "varchar(18)",nullable = false)
+    private String account_number;
+
     @ManyToOne
     @JoinColumn(name = "id_user",nullable = false)
     private Users user;

@@ -26,11 +26,11 @@ public class UsersController {
         return new ResponseEntity<>(this.service.getAll(), HttpStatus.OK);
     }
     @PostMapping("/")
-    public ResponseEntity<CustomResponse<Users>> insert(@Validated @RequestBody UsersDTO usersDTO, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse<Users>> insert(@Validated @ModelAttribute UsersDTO usersDTO, BindingResult bindingResult){
         return new ResponseEntity<>(this.service.insert(usersDTO,bindingResult),HttpStatus.CREATED);
     }
     @PutMapping("/")
-    public ResponseEntity<CustomResponse<Users>> update(@Validated @RequestBody UsersDTO usersDTO, BindingResult bindingResult){
+    public ResponseEntity<CustomResponse<Users>> update(@Validated @ModelAttribute UsersDTO usersDTO, BindingResult bindingResult){
         return new ResponseEntity<>(this.service.update(usersDTO,bindingResult),HttpStatus.CREATED);
     }
     @DeleteMapping("/")

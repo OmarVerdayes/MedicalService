@@ -8,6 +8,8 @@ import lombok.Setter;
 import utez.edu.mx.MedicalService.models.doctors.Doctors;
 import utez.edu.mx.MedicalService.models.users.Users;
 
+import java.sql.Time;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,10 +28,20 @@ public class DoctorDTO {
     @Max(value = 999,message = "El numero de consultorio deber ser menor a mil")
     private Long consulting_room;
 
+    @NotNull(message="La hora de inicio de turno es obligatoria")
+    @NotBlank(message = "La hora de inicio de turno es obligatoria")
+    @Pattern(regexp = "\\d{2}:\\d{2}", message = "La hora de inicio de turno debe estar en formato HH:mm")
+    private Time shift_start_time;
+
+    @NotNull(message="La hora de fin de turno es obligatoria")
+    @NotBlank(message = "La hora de fin de turno es obligatoria")
+    @Pattern(regexp = "\\d{2}:\\d{2}", message = "La hora de inicio de fin debe estar en formato HH:mm")
+    private Time shift_finish_time;
+
     private Users user;
 
     public Doctors castToOriginalObject(){
-        return new Doctors(id,id_number,consulting_room,user);
+        return new Doctors(id,id_number,consulting_room,shift_start_time,shift_finish_time,user);
     }
 
 }
