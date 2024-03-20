@@ -19,6 +19,4 @@ public class Roles {
     private Long id;
     @Column( columnDefinition = "varchar(60)",nullable = false)
     private String name;
-
-
 }

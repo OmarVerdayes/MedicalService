@@ -28,6 +28,4 @@ public class Service_purchase_history {
     @ManyToOne
     @JoinColumn(name = "id_patient",nullable = false)
     private Patient patient;
-
-
 }
