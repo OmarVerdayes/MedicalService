@@ -27,6 +27,14 @@ public class ScriptInitializer {
                     "('20213tn043@utez.edu.mx', 'Santana', 'mendoza', '$2a$10$Hv8DF3vP5h/IhyU.TTMpDuVB8TZ4Q5TpY2dgkrMdlguIEG.6LCn3e', '7775196369', 'Mendoza','imagen1', '2', '1')," +
                     "('20213tn044@utez.edu.mx', 'Diaz', 'Andrea Elizabeth', '$2a$10$IZRalDZ82KkgwkYXXmlCyOhvjkDgglys.DzN5eikBYOdp5ieGK7bq', '7775196369', 'Zagal','imagen1', '3', '1');");
         }
+        if (checkIfTableIsEmpty("appointmentstatus")) {
+            jdbcTemplate.execute("INSERT INTO `appointmentstatus` (`name`) VALUES" +
+                    " ('Solicitada')," +
+                    "('Aceptada')," +
+                    "('Denegada')," +
+                    "('Cancelada')," +
+                    "('Finalizada')");
+        }
 
     }
     private boolean checkIfTableIsEmpty(String tableName) {
