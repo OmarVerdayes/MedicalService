@@ -14,5 +14,5 @@ import lombok.Setter;
 public class IdAppointmentDTO {
     @NotNull(message="El id de la cita es obligatoria")
     @Min(value = 0, message = "El id de la cita no puede ser menor a 0")
-    private Long id_appointment;
+    Long id_appointment;
 }

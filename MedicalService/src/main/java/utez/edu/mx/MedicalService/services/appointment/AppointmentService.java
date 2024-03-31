@@ -9,6 +9,8 @@ import utez.edu.mx.MedicalService.controllers.appointment.DTO.AppointmentDTO;
 import utez.edu.mx.MedicalService.controllers.appointment.DTO.IdAppointmentDTO;
 import utez.edu.mx.MedicalService.models.appointment.Appointment;
 import utez.edu.mx.MedicalService.models.appointment.AppointmentRepository;
+import utez.edu.mx.MedicalService.models.email.DTO.EmailDTO;
+import utez.edu.mx.MedicalService.models.email.MailManeger;
 import utez.edu.mx.MedicalService.utils.ConvertErrorsValidationToString;
 import utez.edu.mx.MedicalService.utils.CustomResponse;
 
@@ -19,7 +21,8 @@ import java.util.List;
 public class AppointmentService {
     @Autowired
     AppointmentRepository repository;
-
+    @Autowired
+    MailManeger mailManeger;
     ConvertErrorsValidationToString convertErrors=new ConvertErrorsValidationToString();
     @Transactional(readOnly=true)
     public CustomResponse<List<Appointment>> getAll(){
@@ -101,9 +104,15 @@ public class AppointmentService {
                 return new CustomResponse<>(null, true,400,errorMessage);
             }else if(!this.repository.existsById(idAppointmentDTO.getId_appointment())){
                 return new CustomResponse<>(null,true,400,"La cita no existe");
-            }
+            }else if(this.repository.statusAppointmentIs_Name(idAppointmentDTO.getId_appointment(),"Denegada")){
+                 return new CustomResponse<>(null,true,400,"La cita ya esta con el estatus 'DENEGADA");
+             }
+
 
             this.repository.updateStatusToDenied(idAppointmentDTO.getId_appointment());
+            mailManeger.sendMessge(new EmailDTO("Cita denegada", repository.getEmailOfPatient(idAppointmentDTO.getId_appointment())
+                    , "DENEGADA", repository.getDateAppointment(idAppointmentDTO.getId_appointment())
+                    ,repository.getAppointmentSpeciality(idAppointmentDTO.getId_appointment())  ));
             return new CustomResponse<>(null,false,200,"El estatus de la cita se actualizo 'DENEGADA'");
         }catch (Exception e){
             return new CustomResponse<>(null,true,400, "Error al actualizar la cita");
@@ -118,9 +127,14 @@ public class AppointmentService {
                 return new CustomResponse<>(null, true,400,errorMessage);
             }if(!this.repository.existsById(idAppointmentDTO.getId_appointment())){
                 return new CustomResponse<>(null,true,400,"La cita no existe");
+            }else if(this.repository.statusAppointmentIs_Name(idAppointmentDTO.getId_appointment(),"Denegada")){
+                return new CustomResponse<>(null,true,400,"La cita ya esta DENEGADA por lo que ya no se puede aceptar");
             }
 
             this.repository.updateStatusToAccepted(idAppointmentDTO.getId_appointment());
+            mailManeger.sendMessge(new EmailDTO("Cita aceptada", repository.getEmailOfPatient(idAppointmentDTO.getId_appointment())
+                    , "ACEPTADA", repository.getDateAppointment(idAppointmentDTO.getId_appointment())
+                    ,repository.getAppointmentSpeciality(idAppointmentDTO.getId_appointment())  ));
             return new CustomResponse<>(null,false,200,"El estatus de la cita se actualizo 'ACEPTADA'");
         }catch (Exception e){
             return new CustomResponse<>(null,true,400, "Error al actualizar la cita");
@@ -135,9 +149,16 @@ public class AppointmentService {
                 return new CustomResponse<>(null, true,400,errorMessage);
             }if(!this.repository.existsById(idAppointmentDTO.getId_appointment())){
                 return new CustomResponse<>(null,true,400,"La cita no existe");
+            }else if(this.repository.statusAppointmentIs_Name(idAppointmentDTO.getId_appointment(),"Denegada")|| this.repository.statusAppointmentIs_Name(idAppointmentDTO.getId_appointment(),"Finalizada")){
+                return new CustomResponse<>(null,true,400,"La cita no se puede cancelar debido a su estatus actual");
+            }else if(this.repository.statusAppointmentIs_Name(idAppointmentDTO.getId_appointment(),"Cancelada'")){
+                return new CustomResponse<>(null,true,400,"La cita ya esta CANCELADA");
             }
-
+            mailManeger.sendMessge(new EmailDTO("Cita cancelada", repository.getEmailOfPatient(idAppointmentDTO.getId_appointment())
+                    , "CANCELADA", repository.getDateAppointment(idAppointmentDTO.getId_appointment())
+                    ,repository.getAppointmentSpeciality(idAppointmentDTO.getId_appointment())  ));
             this.repository.updateStatusToCancelled(idAppointmentDTO.getId_appointment());
+
             return new CustomResponse<>(null,false,200,"El estatus de la cita se actualizo 'CANCELADA'");
         }catch (Exception e){
             return new CustomResponse<>(null,true,400, "Error al actualizar la cita");
@@ -150,10 +171,17 @@ public class AppointmentService {
                 // Si hay errores de validación, devuelve una respuesta con los mensajes de error
                 String errorMessage = convertErrors.convertErrorsValidationToString(bindingResult);
                 return new CustomResponse<>(null, true,400,errorMessage);
-            }if(!this.repository.existsById(idAppointmentDTO.getId_appointment())){
+            }else if(!this.repository.existsById(idAppointmentDTO.getId_appointment())){
                 return new CustomResponse<>(null,true,400,"La cita no existe");
+            }else if(this.repository.statusAppointmentIs_Name(idAppointmentDTO.getId_appointment(),"Denegada")|| this.repository.statusAppointmentIs_Name(idAppointmentDTO.getId_appointment(),"Cancelada")){
+                return new CustomResponse<>(null,true,400,"La cita no se puede finalizar debido a su estatus actual");
+            }else if(this.repository.statusAppointmentIs_Name(idAppointmentDTO.getId_appointment(),"Finalizada'")){
+                return new CustomResponse<>(null,true,400,"La cita ya esta FINALIZADA");
             }
             this.repository.updateStatusToFinished(idAppointmentDTO.getId_appointment());
+            mailManeger.sendMessge(new EmailDTO("Cita Finalizada", repository.getEmailOfPatient(idAppointmentDTO.getId_appointment())
+                    , "Finalizada", repository.getDateAppointment(idAppointmentDTO.getId_appointment())
+                    ,repository.getAppointmentSpeciality(idAppointmentDTO.getId_appointment())  ));
             return new CustomResponse<>(null,false,200,"El estatus de la cita se actualizo 'CANCELADA'");
         }catch (Exception e){
             return new CustomResponse<>(null,true,400, "Error al actualizar la cita");

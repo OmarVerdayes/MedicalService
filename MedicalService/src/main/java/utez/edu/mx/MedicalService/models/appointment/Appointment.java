@@ -28,7 +28,7 @@ public class Appointment {
     @JoinColumn(name = "id_speciality",nullable = false)
     private Speciality speciality;
     @ManyToOne
-    @JoinColumn(name = "id_appointmentStatus",nullable = false)
+    @JoinColumn(name = "id_appointment_status",nullable = false)
     private AppointmentStatus appointmentStatus;
     @ManyToOne
     @JoinColumn(name = "id_doctor",nullable = false)
