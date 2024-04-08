@@ -13,7 +13,7 @@ public class EmailService {
 
 
     public void sendEmail (EmailDTO emailDTO) throws MessagingException {
-        mailManeger.sendMessge(emailDTO);
+        //mailManeger.sendMessge(emailDTO);
     }
 
 }
